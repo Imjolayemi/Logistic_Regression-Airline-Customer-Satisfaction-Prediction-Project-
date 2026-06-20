@@ -10,20 +10,23 @@ The dataset contains survey responses and flight details from over 129,000 airli
 
 ## Environment Setup
 To run this project locally, you will need Python installed along with the following libraries:
-`pip install pandas scikit-learn seaborn matplotlib`
+`pip install pandas scikit-learn seaborn matplotlib statsmodels`
 
-## Step-by-Step Methodology
+## Step-by-Step Methodology & Model Assumptions
 1. **Data Cleaning:** Identified and removed 393 rows containing missing values in the `Arrival Delay in Minutes` column.
-2. **Feature Encoding:** * Transformed the target variable (`satisfaction`) into a binary format (1 = Satisfied, 0 = Dissatisfied) using targeted string replacement.
-   * Converted categorical predictors (`Customer Type`, `Type of Travel`, `Class`) into numerical format using One-Hot Encoding (`pd.get_dummies`), utilizing `drop_first=True` to prevent multicollinearity (the dummy variable trap).
-3. **Data Splitting & Scaling:** Split the dataset into an 80% training set and a 20% testing set to ensure unbiased evaluation. Applied `StandardScaler` to normalize the features so larger numerical values (like Flight Distance) wouldn't distort the Logistic Regression algorithm.
-4. **Model Training:** Built and trained a binomial Logistic Regression model using `Scikit-Learn`.
+2. **Visual Exploration:** Plotted the relationship between Inflight Entertainment and passenger satisfaction, visually confirming a strong positive correlation.
+3. **Feature Encoding:** * Transformed the target variable (`satisfaction`) into a binary format (1 = Satisfied, 0 = Dissatisfied) using targeted string replacement.
+   * Converted categorical predictors into numerical format using One-Hot Encoding (`pd.get_dummies`), utilizing `drop_first=True` to prevent the dummy variable trap.
+4. **Multicollinearity Check:** Calculated the Variance Inflation Factor (VIF) for all independent variables to verify model assumptions. Confirmed there was no severe multicollinearity skewing the results.
+5. **Data Splitting & Scaling:** Split the dataset into an 80% training set and a 20% testing set to ensure unbiased evaluation. Applied `StandardScaler` to normalize the features.
+6. **Model Training:** Built and trained a binomial Logistic Regression model using `Scikit-Learn`.
 
 ## Final Model Evaluation
 The model was evaluated on the unseen 20% testing data using a Confusion Matrix.
+* **Accuracy:** ~83% (The overall percentage of correct predictions).
+* **F1-Score:** ~84% (The harmonic mean, proving the model is highly balanced).
 * **Precision (84%):** Out of all the passengers the model *predicted* would be satisfied, 84% actually were.
 * **Recall (84%):** Out of all the *actually* satisfied passengers in the real world, the model successfully identified 84% of them.
-* **Conclusion:** The model is highly balanced and reliable for predicting customer sentiment. 
 
 ## Key Business Insights & Recommendations
 By extracting the coefficients from the Logistic Regression model, I identified the top drivers of passenger emotion:
